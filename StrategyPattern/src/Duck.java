@@ -5,6 +5,7 @@ public class Duck {
 
     }
 
+    // Inject FlyableStrategy in our constructor
     public Duck (FlyableStrategy flyableStrategy){
         this.flyableStrategy = flyableStrategy;
     }
