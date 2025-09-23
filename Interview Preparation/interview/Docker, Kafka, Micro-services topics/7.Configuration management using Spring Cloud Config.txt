@@ -1,0 +1,114 @@
+*** GIT HUB ***
+https://github.com/eazybytes/microservices-with-spring-sectionwise-code/tree/master/section7
+
+1) Store configuration independently from our code. (Microservice which act as configuration service)
+
+2) Simple architecture:
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Microservices                          Configuration Management Micro Service               DB/GIT/File system
+
+ account          -->             (Load all configuration by connecting to   <--           (Central repositories)
+ loan             -->              central repositorues)                     <--
+
+(Load configuration from            
+config service when app start)
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+3) Spring Cloud Config - provides client and server support for external configuration. Give us central place to create and manage properties.
+    Read all configuration from centralzie repositories like (Github) and all clients (microservices) should have a mechanism to connect to this config server
+    and get the properties that they need.
+   -Sping depencancy: Config Cliend | @EnableConfigServer annotation
+
+4) Different scenarius for configuration.
+    *** Load all configurations from CLASSPATH. | (src/main/resources/config)
+      The differnt app properties for all microservices are stored there: accounts.properties, accounts-prod.properties, cards.properties, cards-prod.properties
+
+   - Configs in the 'application.properies' file:
+-----------------------------------------------------------------------------
+     spring.application.name=configserver    --> (app name)
+     pring.profiles.active=native            --> (when we Load all configurations from classpath)
+     spring.cloud.config.server.native.search-locations=classpath:/config       --> (from where to search and read files)
+     server.port=8071    --> (configiration server port)
+-----------------------------------------------------------------------------
+   
+    *** Reading the configuration from FILESYSTEM. Allow to read the files from our machine filesystem.
+     - Configs in 'application.properies' file:
+--------------------------------------------
+     spring.application.name=configserver   
+     pring.profiles.active=native
+     spring.cloud.config.server.native.search-locations=file:///C://project//app//config   (Accept the location in file sistem)
+     server.port=8071
+------------------------------------------
+
+   *** Reading the configuration from GitHUb (Maybe the best approach)
+ - Configs in 'application.properies' file:
+--------------------------------------------
+     spring.application.name=configserver   
+     pring.profiles.active=git    --> (when we Load all configurations from Git)  
+     spring.cloud.config.server.git.uri=https://github.com/eazybytes/microservices-config.git --> (Indicates the github location, can access it from the repo/clone repo)
+     spring.cloud.config.server.git.clone-on-start=true   --> (clone the repo)
+     spring.cloud.config.server.git.default-label=main    --> (witch branch to use. main=master)
+     server.port=8071
+------------------------------------------
+
+5) How to connect a induvidual micro-service with config service. Individual micro-service (accounts) confuguration examples:
+   - In pom.xml:
+        
+----------------------------------
+	<properties>
+		<spring-cloud.version>2022.0.0</spring-cloud.version>
+	</properties>
+
+	<dependency>
+		<groupId>org.springframework.cloud</groupId>
+		<artifactId>spring-cloud-starter-config</artifactId>
+	</dependency>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+------------------------------------------
+
+- In micro service 'accounts' application.properties, tell from where to connect to config server
+------------------------------------------
+spring.application.name=accounts   --> (should be equal with config service files. For example: accounts-dev.properties, accounts-prod.properties) 
+spring.profiles.active=prod        --> (choose wich envirament to use. In this case is prod=accounts-prod.properties, Can be also dev, local ect..)
+spring.config.import=optional:configserver:http://localhost:8071 --> (Idicates the config server port, WHERE CURRENT (account) app CAN READ it's properties !!!)
+------------------------------------------
+
+- When current micro-service is running will go and ask the config server to give its properties.
+
+@Configuration
+@ConfigurationProperties(prefix = "accounts")    --> (read all data from the given property file, and map then into a class)
+@Getter @Setter @ToString
+public class AccountsServiceConfig {
+	 private String msg;         --> (in accounts.properties corresponds to -> accounts.msg=Welcome to the EazyBank Accounts Dev application)               
+	 private String buildVersion;
+	 private Map<String, String> mailDetails; --> (maps all mailDetails in accounts.properties into a map structure with key-value pairs)
+	 private List<String> activeBranches;
+
+6) How to refresh properties in runtime ->    @RefreshProperty annotation   (create a new (HTTP POST) actuator/refresh api)
+   In application.properties ->               management.endpoints.web.exposure.include=*  (allow accepting of the actuator/refresh api)
+
+   'Property refresh is not possible to update DB configuration becouse they are crated during start of the app. In this case server restert is needed'
+
+7) Encryption/Decryption on our properties in Config Mircro Service. (Encrypt sensitive properties like password/host names). Spring cloud achive this with minimum configurations.
+    - Create a encryption key (encrypt.key=keyValue) with a value assegned of the application.properties of config server
+    - Prefix the desired encrypted property with (cipher)
+
+    In config service app.properties add: encrypt.key=jkSs21!Ld   -> (the encription key)
+    Will expose the (HTTP POST) /enrypt & (HTTP POST) /decrypt. In each individual microservice when encryption is needed
+    Need to pass the encrypter value and with prefix (cipher) which indicates from encrypted value. Example: spring.datasource.url=(cipher)1jhkuh31kh456ghk123kjhhk13kkdRs45
+    
+  
+
+
+

@@ -1,0 +1,4 @@
+1) Form a question in prest simple and continue
+   a) Ask a question to colegue if they review code every day?
+    - Present Simple => Do you review code every day?        
+    - Present Continues => Are you reviewing code every day?

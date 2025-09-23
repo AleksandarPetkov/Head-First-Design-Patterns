@@ -1,0 +1,163 @@
+### GIT HUB ###
+https://github.com/eazybytes/microservices-with-spring-sectionwise-code/tree/master/section5
+
+ *************************** Docker basics *************************** 
+
+1) What is docker - is a tool that allows application to be packaged with all dependacies and run wherever wanted.
+   Software containerazation - can run and deploy containers without using a virtual machine.
+
+2) What is container/image - isolated enviroment that allow us to build and software packages. These packages includs code and all depenacies to run app on any enviroment
+   This packages are called also images
+
+
+3) Docker image vs container. From java perspective 'Docker Image' is like java Class and 'Docker Container' is like object of than Class.
+   Using image we can run and deploy any number of insace of than application
+  Example:                                  -> (container1 myApp) 
+           (image myApp) run three instances -> (container2 myApp) 
+                                            -> (container3 myApp) 
+
+4) Image is very usefull. Contains all libraries and dependancies that app needs to run. No need to be installed every time on different enviroment.
+   If I have image, my friend can take than image an run on his laptop without installing java and spring. He only need to install docker and with
+   command he can convert that image to container and run that appication without problems.
+
+5) Docker HUB - store images in public/private place
+
+
+*************************** Docker Creating image (Basic approach) *************************** 
+
+1) Inside the main application folder (one level with pom.xml file) create a 'Dockerfile' (without extansion) with content:
+    #Start with a base image containing Java runtime
+    FROM openjdk:17-jdk-slim as build                                   (need java in our container)
+
+    #Information around who maintains the image
+    MAINTAINER eazybytes.com                                             (who is the author)
+
+    # Add the application's jar to the container
+    COPY target/accounts-0.0.1-SNAPSHOT.jar accounts-0.0.1-SNAPSHOT.jar  (shows from where to copy the JAR.file)
+
+    #execute the application
+    ENTRYPOINT ["java","-jar","/accounts-0.0.1-SNAPSHOT.jar"]            (write command to run the application)
+ 
+ Example in https://github.com/eazybytes/microservices-with-spring-sectionwise-code/tree/master/section5/accounts
+  
+2) Open a main application folder (one level with pom.xml file) in CMD (Command prompt)
+   command to create a new image: docker build . -t dockertest/myapp  | Where '-t' is the image tag name 
+
+
+3) Create container from image. Open e main application folder (one level with pom.xml file) in CMD (Command prompt)
+    execute command: docker run -p 8080:8080 dockertest/myapp | Where "dockertest/myapp" is my image name.
+   Can start another with docker run -p 8081:8080 Where 8081 will be ourside word 8080 will be only one instance but can generate more from outside word 8082:8080/8083:8080/8084:8080
+
+4) Commands:
+    docker ps (which cointainers are started) / docker stop fc / docker logs -f fc | where 'fc' is the first characters from the container id
+
+
+*************************** Docker Creating image (using Buildpacks) *************************** 
+
+1) When using Buildpacs Dockerfile in no needed anymore.
+2) In pom.xml add:
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<image>
+						<name>eazybytes/${project.artifactId}</name>
+					</image>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+3) Open a main application folder (one level with pom.xml file) in CMD (Command prompt) and run:
+   mvn spring-boot:build-image  (use Buildpacs to autamatically generate image)
+
+4) Run the image into container: docker run -p 8090:8090 nameapp/nameapp
+
+5) Push Docker image into a remote Docker hub. Command docker push docker.io/nameapp/nameapp
+
+
+*************************** Docker-Compose *************************** 
+
+1) Definition: When using Docker extensively, the management of several different containers quickly becomes cumbersome.
+    Docker Compose is a tool that helps us overcome this problem and easily handle multiple containers at once. Using YAML Configuration.
+
+2) Check is already instaled: docker-compose --version (By default is installed with docker)
+
+3) Example docker-compose.yml file. Create the file in main application folder (one level with pom.xml file)
+----------------------------------------------------
+version: "3.8"            -> (docker compose version)
+
+services:
+
+  accounts:
+    image: eazybytes/accounts:latest
+    mem_limit: 700m
+    ports:                -> (porsts when container will start. Can be one ot more)
+      - "8080:8080"
+    networks:
+      - eazybank-network -> (which network to interact with)
+    
+  loans:
+    image: eazybytes/loans:latest
+    mem_limit: 700m
+    ports:
+      - "8090:8090"
+    networks:
+      - eazybank-network -> (which network to interact with)
+
+ networks:               -> (create a network fol all services)
+  eazybank-network:
+----------------------------------------------------
+4) Command to start docker compose: docker-compose up | Will start all difined microservices inside the file.
+
+5) UPDATE docker compose file to adapt with CONFIG SERVICE 
+   (https://github.com/eazybytes/microservices-with-spring-sectionwise-code/tree/master/section7/accounts/docker-compose/default)
+
+ -create different packages for all enviriments and update the compose file depending on the enviroment.
+                      default      -> docker-compose.yml
+  app/docker-compose/ dev          -> docker-compose.yml
+                      production   -> docker-compose.yml
+   
+----------------------------------------------------
+version: "3.8"
+
+services:
+
+  configserver:                                       --> (inluding config server)
+    image: eazybytes/configserver:latest
+    mem_limit: 700m
+    ports:
+      - "8071:8071"
+    networks:
+     - eazybank
+      
+  accounts:
+    image: eazybytes/accounts:latest
+    mem_limit: 700m
+    ports:
+      - "8080:8080"
+    networks:
+      - eazybank
+    depends_on:                    --> (allocate that the 'accounts' depends on 'configserver' Docker compose has to make sure ''configserver' is being started)
+      - configserver
+    deploy:
+      restart_policy:              --> (if accounts fail to start user the provided restart policy)
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    environment:                       --> (choose which envirament to start)
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+----------------------------------------------------
+ - Starting All microservices defined in the docker-compose file:
+     Command:    docker compose up    (first config server is started becouse other micro services are depend on config server)
+
+
+6) Update previos images & Docker Compose and push to the hub -> https://www.udemy.com/course/master-microservices-with-spring-docker-kubernetes/learn/lecture/27114810#overview
+    lectures 66, 67, 68, 69
+
+
+

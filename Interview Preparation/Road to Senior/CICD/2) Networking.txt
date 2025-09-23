@@ -1,0 +1,52 @@
+**** What is a network?
+ A network is a group of two or more computers (or devices) that are connected so they can share information, resources,
+ or services (like printers, files, or internet access).
+
+ 👩‍💻🧑‍💻 Example: Computer A + Computer B
+ When Computer A and Computer B are connected:
+
+ ✅ They can send files to each other
+ ✅ They can communicate (e.g., chat or send messages)
+ ✅ They can share the internet or printers
+ ✅ They can access shared folders or programs
+
+🔌 How does it work?
+ - Physical Connection
+ - With a cable (Ethernet) or Wi-Fi
+ - Both computers are connected to the same router or switch
+
+  IP Address: Each computer gets a unique IP address (like a home address) It helps devices find each other on the network
+
+**** Protocol (language)
+
+ Computers use rules like TCP/IP to talk and transfer data safely
+
+ 📦 Example Scenario:
+ You want to send a file from Computer A to Computer B
+
+ A locates B using the IP address
+ A sends the file using TCP/IP over the cable or Wi-Fi
+ B receives and saves the file
+
+**** What is a Gateway?
+ A gateway is a device (usually a router) that connects your local network (like Computer A and Computer B) to another network, often the internet.
+ Think of it like a bridge or a doorway between your small home network and the big world of the internet.
+
+ 🖥️💻 Example with Computer A and B + Gateway:
+ Computer A and Computer B are connected to the same router
+ The router also connects to the internet
+ The router acts as the gateway
+
+*** HTTPS / TCP/IP connection
+ Example: when you connect to Google.com, the connection is made using HTTPS, which runs on top of TCP/IP.
+
+ ➡️ So when you type https://www.google.com, your computer is using:
+  🔹 IP to reach Google’s server
+  🔹 TCP to open the connection
+  🔹 TLS (inside HTTPS) to encrypt it
+  🔹 HTTPS to actually request the web page
+
+ 🔐 So what is HTTPS? = HTTP + SSL/TLS
+   HTTP: the protocol for web communication (e.g., requesting pages)
+   TLS: encrypts everything so no one can spy on you
+   Runs over TCP/IP

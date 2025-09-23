@@ -1,0 +1,40 @@
+
+*Props in react component-pass data between the components
+ we receive props in this syntax: | <App title='Hello'/> | export function App (props) to access use {props:title}
+ Conponent sending the props data is 'Parent' and the receiver is 'Child'
+ JSX return statement: if we want to return HTMLcode for multiple lines shoud be inside ();
+
+*Props vs State
+ Props are used to pass data from a parent component to a child component, while state is used to manage data WITHIN a component.
+ Props are immutable and cannot be changed within a component, while state is mutable and can be updated using the setState function.
+
+* Events: is a process where JS interact with the HTML. They are separated in goups
+  -Mouse click Events (onClick, onDrop, onMouseup ... ext)
+  -Clipboard Events (onCopy, onPaste .. ext)
+
+* State in React: Props/Hooks Is data inside the component and can be mutated
+
+* Hooks - Declare state variable(showMenu) & function(setShowMenu): const [showMenu, setShowMenu] = useState(false); <=Array Destructuring
+ Destructuring assign value o multiple variables in one line:
+ const fruits = [a,b,v];
+ const [fruitA, fruitB, FruidV] = fruits;
+ UseState should be call at the top level in our component
+
+*Context API: share state between all the components. Work as extracted the data from separated file that hold the state in context. Then just import it when needed.
+ - useReducer - hook| const [state, dispatch] = userReducer(reducer, initialState) => where reducer is a method 
+
+*Stateless vs Statefull component:
+ The difference between stateful and stateless is that one has state, and the other doesn’t. That means the stateful components are keeping track of changing data, while stateless  components print out what is given to them via props, or they always render the same thing.
+ Common practice is to have STATEFULL component as parent which send a state down to the STATELESS child components.
+ -in addition to STATE - VALUES and FUNCTIONS can be also pass to the child component
+
+*Website navigation - browse pages from single component (navbar (horizontal) /sidebar (vertical), footer ect...)
+ React cant imitade multi-page website. But we can make this possible with 'REACT ROOTER' {BroweserRooter}, import { Route, Routes } from 'react-router-dom';
+ Expl: <Route path={ROUTES.BOOKINGS} element={<Bookings />} ; <Link to .....
+ - How work - is not going to other page, just rander one component instead of another
+ - We can render components conditionally. Ternary opearator is goof choose for this. { isWorkday ? <Workday /> : <Weekend /> }
+
+*Аssets in React (Images, stylesheets, fonts)
+ - adding 'assets' folder and keep all files that are needed
+ - can be invoked by import, url, and requared
+ 

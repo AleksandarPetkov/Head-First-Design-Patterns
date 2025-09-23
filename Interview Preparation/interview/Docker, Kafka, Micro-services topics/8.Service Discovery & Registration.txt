@@ -1,0 +1,115 @@
+### GIT HIB ###
+https://github.com/eazybytes/microservices-with-spring-sectionwise-code/tree/master/section8
+
+0) Servici discovery pattern - resolving the problems like how microservice identify other microservice inside the network
+    how they register themselves and other services to reach them
+
+
+1) Why traditional load-balancer not work for microservices.
+   We have a DNS server (load-balancer) which ckeck the rooting table (all instances that are available) and do its own logic (check location and select the closest server)
+   In this case we have a huge dependancy between the DNS (load-balancer) and the services.
+   Huge disadvantages for microservices using this approach:
+     -Manually update all ip adresses in the rooting table.
+     -Not container friendly
+     -Limited scalability
+
+2) How service discovery architecture works:
+    -Client layer (React/Angular) - They are no worry about IP details of the microservice. They will just invoke Service discovery layer with logical service name.
+
+    -Middle layer (Service discovery layer) is a micro-service which maintain all address details, actual location of the microservices and they instances in the network   
+  
+    -Microservice layer (All other microservices) during start up they will register themselves to the service discovery layer with a logical name.
+     For example 'accounts' microservice will register himselves "/accounts". Also expect each individual microservice to send a 'HEART-BEAT' signal which indicate for
+     properly working microservice. Default time is 30 seconds
+
+3) Client side service discovery: When a microservice want to connect to other microservice. First will check in local cache for service instance IP's
+   Account service ->   Client side cache  -> if find the service IP's in cache call it -
+                                           -> if cannot find it go to Load balancing (Discovery Service)
+                        
+   Client Cache will be periodically refreshed from Discovery Service
+   All Micro services periodically sends a heartbeat singnals
+
+4) Setup Service Discovery using Eureka Server
+    -Create a microservice which act as Service Discovery service using dependancies (Eureka Server, Spring Cloud Config)
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+     		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+		</dependency>
+       inside pom also include exlusions and image details(check in github)
+    - Add @EnableEurekaServer (act as servies discovery)
+    - Inside \src\main\resources\application.properties
+    --------------------------------------------------------
+    spring.application.name=eurekaserver
+    spring.config.import=optional:configserver:http://localhost:8071
+    --------------------------------------------------------
+    - Create a  eurekaserver.properties in Configuration servive. No need to add different property files for the different environment (dev, prod ect..)
+    --------------------------------------------------------
+    server.port=8070
+    eureka.instance.hostname=localhost
+    eureka.client.registerWithEureka=false  --> (Do not register yorself as client of Eureka becouse do not have a buiseness logic)
+    eureka.client.fetchRegistry=false
+    eureka.client.serviceUrl.defaultZone=http://${eureka.instance.hostname}:${server.port}/eureka/
+    --------------------------------------------------------
+
+5) Register other microservices to connect to Eureka micro service. Example with 'account' microservice:
+    -pom.xml
+   		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>    --> (indicates for clients of eureka server)
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>               --> (to invoke other microservices)
+		</dependency>
+
+   -application.properties                        --> (Connecting to eureka server)
+    eureka.instance.preferIpAddress = true        --> (Register with IP add)
+    eureka.client.registerWithEureka = true
+    eureka.client.fetchRegistry = true
+    eureka.client.serviceUrl.defaultZone = http://localhost:8070/eureka/    --> (Defines the eureka endpoint)
+
+    ## Configuring info endpoint          --> (This values will be displayed from eureka service/actuator info)
+    info.app.name=Accounts Microservice
+    info.app.description=Eazy Bank Accounts Application
+    info.app.version=1.0.0
+
+    endpoints.shutdown.enabled=true     --> (Allows manually service shutdown)
+    management.endpoint.shutdown.enabled=true
+    management.info.env.enabled = true
+
+6) How to de-register/re-connect microservice from Eureka:
+   HTTP POST  /microservicePort/actuator/shutdown
+
+7) Feign CLient to invoke other microservices
+    -dependancy
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>            
+		</dependency>
+
+   -Annotation @EnableFeignClients to our main class
+
+   -Create an interface. Is similar to JPA, where we create an interface and base on method names JPA create a DB query. In our case we need to build a interface
+     in order to connect to the other microservices. Example:
+     ----------------------------------------------------------
+       @FeignClient("cards")          
+       public interface CardsFeignClient {
+
+	@RequestMapping(method = RequestMethod.POST, value = "name-of-the-endpoint", consumes = "application/json")
+	List<Cards> getCardDetails(@RequestBody Customer customer); }
+      ----------------------------------------------------------
+
+    - Add as dependancy and invoke the method
+	@Autowired
+	CardsFeignClient cardsFeignClient;
+        List<Cards> cards = cardsFeignClient.getCardDetails(customer);
+ 
+8) Self-Preservation - is triggered when certain procent of service instances do not send a heartbeat signal.
+
+
+
+

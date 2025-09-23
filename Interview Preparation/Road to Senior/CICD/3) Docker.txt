@@ -1,0 +1,89 @@
+** What Are Containers?
+ Containers are lightweight, portable units of software that package up code along with everything it needs to run—like libraries,
+ dependencies, and system tools—so that it works consistently across different environments.
+
+ Think of a container as: 💼 A "box" that holds your application and all its stuff, so it runs the same on your laptop, a server, or the cloud.
+
+
+** What Is Docker?
+ Docker is the most popular containerization platform. It lets you:
+
+  Build containers
+  Ship them anywhere
+  Run them reliably
+  Docker simplifies the process of creating and managing containers by:
+  Providing a CLI (command-line interface)
+  Offering tools to build, run, and manage container images
+  Using Dockerfiles to define how your container is built
+
+** Why Do We Need Docker/Containers?
+Without Docker or containers, your app might run differently:
+
+ On your machine vs. a colleague’s
+ On staging vs. production
+ On Windows vs. Linux
+
+ With Docker, you get:
+
+ ✅ Consistency across environments
+ ✅ Isolation from host OS and other apps
+ ✅ Speed: Faster setup and deployment
+ ✅ Scalability: Easily replicated and deployed in clusters
+ ✅ Version control of environments (via Docker images)
+
+** What Can Docker Do?
+ Docker can help you:
+
+ Run any application in a self-contained environment
+ Create reproducible builds using Dockerfiles
+ Test code across multiple environments
+ Deploy microservices with ease
+ Simulate production on your local machine
+ Work with CI/CD pipelines
+ Scale with orchestrators like Kubernetes
+
+*** Docker Compose => External Services (MySQL, Redis) Are Usually in Separate Containers
+ Docker doesn’t "install MySQL inside the Spring Boot container." Instead: You use Docker Compose to define multiple containers:
+
+ One for your Spring Boot app
+ One for MySQL
+ One for Redis
+
+ You declare them in (example docker-compose.yml):
+
+*** Container (running instance of image) VS Image (template)
+*** Docker vs Virtual Machine
+*** Docker interprise vs community
+
+******** Docker Commands
+
+ * Build an image
+  - Build image: docker build -t <image-name> .  ||| t = tag (name) the image ||| . = use current directory (where Dockerfile is)
+  - Example: docker build -t myapp .
+
+ * Run a container
+  - docker run [options] <image-name>
+  - Useful options:
+
+  -d = detached mode (run in background)
+  -p 8080:80 = map host port to container port
+  --name mycontainer = give the container a name
+  -e VAR=value = pass environment variables
+
+ * List all containers
+
+  - docker ps           # running containers
+  - docker ps -a        # all containers (even stopped)
+
+ * Remove/Stop images / containers
+   - docker rmi <image-name or ID>
+   - docker stop <container-name or ID>
+   - docker rm <container-name or ID>
+
+ * See Logs in container: docker logs <container-name>
+
+ ** Build and run with Docker Compose. If you have a docker-compose.yml:
+
+   - docker-compose up          # build & run
+   - docker-compose up -d       # run in background
+   - docker-compose down        # stop and remove all

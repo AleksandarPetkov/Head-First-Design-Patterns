@@ -1,0 +1,71 @@
+### GIT HUB ###
+https://github.com/eazybytes/microservices-with-spring-sectionwise-code/tree/master/section9
+
+
+1) What mean resileant in microservieces - ability to escape from difficult situation. Avoid cascading failures inside our network.
+   For example we have three Microservices A,B,C
+   ('A' call 'B' call 'C')    =>    in this case 'A' wait for ouput 'B' & 'C' and 'B' wait ouput from 'C' and if 'C' is behaving slowly will effect 'A' & 'B'.
+   For this reason we need "FALL-BACK MECHANISM" to send some value from cache or DB.
+   Due to than reason Resilience4j patterns are using.
+
+2) Resilience4j patterns:
+
+  ********  Circuit Breaker ******** 
+   
+   - dependancies:
+    		<dependency>
+			<groupId>io.github.resilience4j</groupId>
+			<artifactId>resilience4j-spring-boot2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.github.resilience4j</groupId>
+			<artifactId>resilience4j-circuitbreaker</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.github.resilience4j</groupId>
+			<artifactId>resilience4j-timelimiter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+   
+    -  annotation:
+         	@CircuitBreaker(name = "detailsForCustomerSupportApp",        --> (name will be used in appplication.properties for configurations and also for tracking in actuator)
+                                   fallbackMethod = "myCustomerDetailsFallBack" --> (Implement a Fall Back mechanism using a method)
+	
+    - application.properties ('accounts')
+                resilience4j.circuitbreaker.configs.default.registerHealthIndicator= true                     -->(register all info in actuator)
+                resilience4j.circuitbreaker.instances.detailsForCustomerSupportApp.minimumNumberOfCalls= 5    -->(the name "detailsForCustomerSupportApp" same as @CircuitBreaker annotation) 
+                resilience4j.circuitbreaker.instances.detailsForCustomerSupportApp.failureRateThreshold= 50
+                resilience4j.circuitbreaker.instances.detailsForCustomerSupportApp.waitDurationInOpenState= 30000   -->(30000 milliseconds = wait 30 sec)
+                resilience4j.circuitbreaker.instances.detailsForCustomerSupportApp.permittedNumberOfCallsInHalfOpenState=2
+       
+      * With this configuration Circuit Breaker pattern will act as proxy of top of our API, will keep monitoring all of the requests from the other microservices or applications.
+
+    ********  Retry Pattern ********
+
+      -  annotation:
+         @Retry(name = "retryForCustomerDetails", fallbackMethod = "myCustomerDetailsFallBack")
+
+      - application.properties
+         resilience4j.retry.configs.default.registerHealthIndicator= true
+         resilience4j.retry.instances.retryForCustomerDetails.maxRetryAttempts=3
+         resilience4j.retry.instances.retryForCustomerDetails.waitDuration=2000
+
+   ********  Rate Limiter pattern ********
+     -  annotation:
+     @Retry(name = "retryForCustomerDetails", fallbackMethod = "myCustomerDetailsFallBack")
+
+
+3) Tracking Circuit Breaker pattern activities in actuator: /actuator/circuitbreakerevenets/?name=detailsForCustomerSupportApp
+
+4) Fall Back Method implementation:
+
+  private CustomerDetails myCustomerDetailsFallBack(Customer customer) {  -> (the name "myCustomerDetailsFallBack" same as @CircuitBreaker annotation and located in same Class)
+                                                                             ( parameters should be the same like API, can be add Trowable also)
+		some buiseness logic.......
+		some buiseness logic.......
+  }
+
+

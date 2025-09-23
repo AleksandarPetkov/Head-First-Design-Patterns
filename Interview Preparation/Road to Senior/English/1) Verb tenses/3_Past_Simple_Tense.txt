@@ -1,0 +1,47 @@
+1) The Past Simple tense is used to talk about actions or events that happened in the PAST and are FINISHED.
+
+🕒 Examples:
+  I watched a movie yesterday.
+  She visited Paris last year.
+
+2) How to Form the Past Simple
+   A) Regular Verbs Add -ed to the base verb.
+    walk->walked, play->played, clean->cleaned
+
+ Spelling Rules:
+ If the verb ends in e, just add -d: love → loved
+ If the verb ends in a consonant + 'y', change 'y' to 'i' and add -'ed': study → studied
+ For most one-syllable verbs with a vowel + consonant, double the final consonant: stop → stopped
+
+  B) Irregular Verbs. Irregular verbs don’t follow the -ed rule. You must memorize them.
+  Example: go -> went, eat -> ate, have->had, be->was/were, take->took
+
+
+3) NEGATIVE FORM
+ 🧠 Structure: Subject + didn’t + base verb (infinitive)
+ ⚠️ Use the base form of the verb, not the past form!
+
+✅ Correct	 ❌ Wrong
+I didn’t eat.	 I didn’t ate. ❌
+She didn’t go.	 She didn’t went. ❌
+
+4) QUESTION FORM
+ 🧠 Structure: Did + subject + base verb + (object)?
+ ⚠️ Always use the base verb after did.
+
+ 🗣 Examples: Did you watch the movie? Did she go to work yesterday? Did they have dinner with you? Did he call you last night?
+
+Exercises:
+
+ A) Did you watch the game last night? ❌
+    ❗ You wrote: "Did you watched", but after did, we always use the base form, not the past form.
+    ✅ Correct answer: Did you watch the game last night?
+
+ B) Remember: after didn’t, always use the base verb, not the past form.
+    ❌ He didn’t watched TV [Wrong]
+    ✅ He didn’t watch TV.
+      
+
+
+
+

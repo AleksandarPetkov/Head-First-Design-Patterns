@@ -1,0 +1,59 @@
+Spring Security - Basic
+
+1) URL Authorization
+ 
+ - antMatchers("/delete/**").hasRole("ADMIN"). hasAuthority, hasAnyRole, hasAnyAuthority. Difference between hasRole/hasAuthority is the  prefix "ROLE_"
+ - Spring Boot 2, the password must be encrypted. This means that we need to define a bean of type PasswordEncoder and use it to encrypt the password when creating the user credentials
+
+2) LOGIN FORM 
+ - If we want to override default login form created by Spring .formLogin().loginPage("/login") and custom action (POST) to .loginProcessingUrl("/doLogin")
+
+3) Base LOGOUT- .logout().permitAll(). By default, the logout URL will be /logout - we can change that: (.logoutUrl("/custom-logout"))
+  change if the authentication is cleared on logout:   clearAuthentication
+  mark specific cookies for deletion on logout:        deleteCookies
+  change if the httpsession is invalidated on logout:  invalidateHttpSession
+  change the logout success URL:                       logoutSuccessUrl
+  a logout handler or a logout success handler
+
+4) Anonymous/VISITOR “Authentication” In those cases, instead of having to manually implement null checks and deal with this scenario manually - 
+     it's much easier to have an "anonymous" us  er to fall back on. Can be used in audit LOG 
+
+5) Spring Security & OAuth2 https://www.youtube.com/watch?v=G0OZ9okJ5Js&list=PLLhgRnf2WBVQe1iPUuNZnMmlqK6vd_o59
+   - Spring Security Architecture : https://docs.spring.io/spring-security/reference/servlet/architecture.html6
+   - Spring Security Filters      : https://docs.spring.io/spring-security/reference/servlet/architecture.html#servlet-security-filters
+   - Form Login Filter            : https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/form.html
+   - Authentication Provider      : https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/dao-authentication-provider.html
+
+6) User Role vs Authority in Spring Security contex
+   Role - what user is ? ADMIN/MODERATOR/USER / it's a noun
+   Authority  something that user has rights to (only read data, update create data) /think as verb. Can be implemented by 'Permission' table in DB and get them in UserDetailsServiceImpl
+
+7) DB Security schema => https://docs.spring.io/spring-security/site/docs/5.0.x/reference/html/appendix-schema.html
+
+8) Basic 
+- Authentication: process of verifying who a user is. Provided by => (username/password)
+UserDetailsService   => Interact with JPA in order to validate the user details and
+return the jwt token with user details (username/role/authorities/expiration)
+
+- Authorization: determining what the user has access to. Provided by => (Bearer token)
+JwtTokenFilter (extends OncePerRequestFilter) => inspect the jwt token from  Authorization - Bearer header
+and keep the data for the loged user in ThreadLocal storage
+
+9) OAuth2 - standard for authorization, not authentication!
+   One of the core goals of OAuth is to help users no longer have to provide their full credentials directly into third-party applications to allow access to their resources
+   Roles:
+   Resource owner - user or server which owns protected resource and can grand access to then
+   Client - system that requares access to the protected resource. To access resource need to have a Access Token
+   Authorization Server - this server receives reqeusts from the Client for Access Token
+   Resource Server - accept and valdiate Access token from the client and return appropriate resource to it
+   # OAuth authorization flows -> https://www.oauth.com/playground/
+
+10) Single Sign On: is an authentication method that enables users to securely authenticate with multiple applications and websites by using just one set of credentials
+    https://www.onelogin.com/learn/how-single-sign-on-works
+
+11) LDAP & Active Directory (Lightweight Directory Access Protocol): https://www.youtube.com/watch?v=0FwOcZNjjQA / https://rublon.com/blog/ldap-active-directory-difference/
+                                                                     https://spring.io/guides/gs/authenticating-ldap/
+     Active Directory is a directory server that stores user information such as usernames, phone numbers, and email addresses,
+     LDAP is a protocol that allows reading and modifying that information. Mainly used for companies becaouse of the hirarcy structure (implemented like tree with cn/ou/dc)
+
+https://www.oauth.com/playground/ ей с това добре се разбира целия флоу на различните oauth2 имплементации

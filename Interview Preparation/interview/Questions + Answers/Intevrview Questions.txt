@@ -1,0 +1,61 @@
+----------------- Company: Experian -----------------
+защо избра Java?
+SAOP experience ? difference between REST and SOAP ? - xml, wsdl
+SOLID
+last java version used? - new features?
+difference between map and flat map
+
+streams - which is the most noticable limitations ? - final?
+what is functional interface ?
+
+design patterns 
+- what is factory pattern?
+- what is adapter pattern?
+
+(другия, който обикновенно задача въпроси го няма..)
+
+IoC
+
+multi threading
+- which are the different thread states?
+- другия колега имал много въпроси по темата
+
+HashMap - how does it work internaly?
+
+why would we want to overwrite the hash method ?
+
+difference between controller and rest controller in spring?
+
+
+----------------- Company: Adesso -----------------
+Adesso questions
+1. представяне на тях
+2. представяне на теб на англ.
+3. тех. въпроси
+4. Ти питаш
+
+питат за setup-a на екипа с който си работил, за процеса на работа (дев, тест, среди)
+
+4 принципа на ООП - абстракция , енкапсулация, полиморфизъм, inheritance
+access modifiers в java (private, protected, ...)
+overload vs override
+interface vs abstract class - koga koe
+
+структури от данни - list, arrayList, linkedList, Set, HashSet, HashMap
+какво си ползвал от спринг
+DI
+SQL
+как правиш many-to-many v DB-to
+REST
+post vs put
+put vs PATCH
+token? jwt ?
+git
+merge vs rebase
+работил ли си със cloud?
+design patterns
+какво искаш да правиш? какво ти е интересно? как искаш да се развиваш?
+--------------
+https://ably.com/topic/websocket-vs-rest - REST VS WEBSOCKETS
+
+

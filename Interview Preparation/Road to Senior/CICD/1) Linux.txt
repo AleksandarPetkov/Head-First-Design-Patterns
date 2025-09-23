@@ -1,0 +1,41 @@
+Base commands:-ls (list), pwd (cuurent folder),
+ mkdir new_directory,  mkdir -p new_directory/county/city (create whole path)
+ -rm r new_directory/county/city (remove directory),
+ cp -r old_directory new_directory/county/city [copy drom one to other directory]
+ -> Execute more than one command using ; => mkdir new_directory ; cd new_directory ; ls
+
+* File manipulation commands:
+  touch new_file.txt [Create file/ no content]
+  cat > new_file.txt [Ouput console is shown can add text] => CNTR + D => exit from prompt
+  cat new_file.txt [View content]
+  
+  Edit file: vim or vi
+   - command mode
+   - insert mode
+   vim filename.txt  
+     -> Delete lines: 'x' or 'dd' delete whole line
+     -> Copy paste -> 'yy' copy => 'p' paste
+     ->  Scrool up/down CNTR + u , CNTR + d
+     -> Find word i file => '/textForSearch'
+
+     -> Press i to enter Insert mode.
+     -> Press Esc to exit Insert mode.
+     Type :w to save, :q to quit, or :wq to save and quit.
+
+* User specific
+ whoami [show current user]
+ id [more user info]
+ su adminUser [switch to other user]
+ ssh admin@128.1.21.431 [log into other system]
+ sudo su [ switches you to the root user account]
+
+* Download files: curl / wget commands
+
+* Package Managemen
+ - RPM -Install only single package not its dependacies. For example can install Ansible but not the dependant Python
+  rpm -i telnet.rpm => install package
+  rpm -e telnet => Uninstall package
+  rpm -q telnet => query the package
+
+- YUM - Install package with all dependacies
+  yum install ansible

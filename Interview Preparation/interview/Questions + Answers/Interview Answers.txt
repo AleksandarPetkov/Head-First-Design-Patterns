@@ -1,0 +1,413 @@
+******************************************************** 
+   
+1.	Introduction
+I am a Java developer having more than 3 years of experience. I am mainly focused on back-end development with the Spring boot framework. Additionally, I possess some familiarity with front-end development, particularly in JavaScript and React. I have been at Sirma for almost two years, I've actively contributed to various projects characterized by diverse structures, team sizes, and business cases.
+
+2.	Strengths
+I consider myself a team player I actively contribute ideas and support teammates. My strong analytical skills allow me to analyze complex problems and develop effective solutions. My passion for technology keeps me learning and innovating my knowledge.
+
+3.	Weaknesses
+I sometimes find myself staying quieter during meetings, particularly when I'm absorbing new information.
+
+4.	Project description
+I dedicated over half a year to a project focused on enabling users to generate profits through task completion and team formation.
+We connected with cryptocurrency exchanges, enabling efficient data exchange and transaction processing. Our team was around 6 to 10 people depending on the project
+      phase and the remaining tasks.
+
+5.	My main responsibilities
+As a back-end developer, my main responsibilities included designing and implementing RESTful APIs using Spring Boot, managing PostgreSQL databases, integrating our application with cryptocurrency exchanges, and ensuring security.
+
+
+
+**************************** Basic Consepts ****************************
+
+1) Coupling - is a measure of how much a class is dependent on other classes. A situation where an object can be used by another object.
+    Types of Coupling:
+    - Tight coupling: The situation where an object creates another object for its usage. When classes are highly dependent on one another
+    - Loose coupling: When an object gets the object to be used from external sources (via contructor)
+
+2) Cohesion - is a measure of how the methods of a class or a module are meaningfully and strongly related and how focused they are in providing a well-defined purpose to the system.
+
+3) InstanceOf - Usually using "instanceof" is a code smell. Simply put - it makes your code procedural, not object oriented =>  https://stackoverflow.com/questions/30894002/is-it-good-   practice-to-often-use-instanceof
+
+4) Inner Class - are declared inside other classes -> "public class InnerClass{}"
+    (inner classes) have access to other members of the enclosing class, even if they are declared private. Because they cannot be inicialized without the enclosing class.
+
+5) Static inner Class - declared inside other classes with static keyword -> ""public static class StaticInnerClass{}""
+    Static nested classes do not have access to other members of the enclosing class. Because is it possible to innicialize them before the enclosing class.
+    OuterClass.InnerClass innerObject = outerObject.new InnerClass();
+
+6) "Final" key word: On Class (cannot be extented), On Method (cannot be overrided), On Variable (once initialized the value cannot be changed)
+
+7) "Static" :
+    - Static 'VARIABLE' in Java is variable which belongs to the class and initialized only once at the start of the execution.
+     It is a variable which belongs to the class and not to object(instance). Static variables are initialized only once, at the start of the execution.
+     These variables will be initialized first, before the initialization of any instance variables.
+      * A single copy to be shared by all instances of the class
+      * A static variable can be accessed directly by the class name and doesn’t need any object
+
+    - Static 'METHOD' in Java is a method which belongs to the class and not to the object. A static method can access only static data.
+      It is a method which belongs to the class and not to the object(instance). A static method can access ONLY static data. It cannot access non-static data (instance variables).
+       * A static method can call only other static methods and can not call a non-static method from it.
+       * A static method can be accessed directly by the class name and doesn’t need any object
+       * A static method cannot refer to “this” or “super” keywords in anyway
+
+     Normal (Instance) methods can access static content.
+   
+    - Static 'BLOCK' is a block of statement inside a Java class that will be executed when a class is first loaded into the JVM.
+      A static block helps to initialize the STATIC data members, just like constructors help to initialize instance members
+
+8) Checked / Unchecked Exceptions: A checked exception is caught at compile time, whereas a runtime or unchecked exception is, as it states, at runtime
+
+9) Variable Arguments (Varargs). The varrags allows the method to accept zero or muliple arguments. | exampleMethod (Integer.. num) |
+
+10) Sereliazation / De-serialization help up to save or retrieve the state of the object. [implement Serializable]
+    - Sereliazation: convert object state to some internal representation (SQL/File)
+    - De-serialization: Convert intetnal representation to Object -> JSON to Object / XML to Object
+    And they use ObjectOutputStream.writeObject()/readObject()
+
+11) Java versions new features
+java 11 var keyword / new String methods isBlank()
+java 14 switch case break case on every condition / yield return value from case blovk (14)
+java 15 Text Blocks (15)
+java 16 Record Class POJOs (Plain Old Java Objects) Records Cannot be Entities!  Hibernate depend upon entities that have no argument constructors, non-final field
+java 16 Sealed Classes (16) (cannot be inherited but can be instantiated) public sealed class Vehicle permits Bicycle, Car
+
+12) MySQL vs PostgreSQL
+  -PostgreSQL - object-relational database (ORDBMS) table inheritance, good for large databases, handle complex queries
+  -MySQL - relational database,  simpler database that’s fast, reliable, well-understood, and easy to set up and manage
+
+
+
+**************************** Multithreating ****************************  
+
+1) Threads allow code to run in parallel
+
+2) Creating Thread:
+   - MyThread extends Thread and overrinde run method()
+   - MyThread  implements Runnable and overrinde run method()
+
+3) How to run a thead?
+   - .start() method => To start a thread, you must call the start() method, not the run() method directly. The start() method creates a new thread and executes the run()
+     method in that new thread. If you call run() directly, the code will execute on the current thread, not on a new thread.
+
+4) States of thread:
+    - "New" - when a thread is created but is not runned.
+    - "Active" - When a thread invokes the start() method. The active state contains two states within it: one is *runnable, and the other is *running.
+       * runnable - A thread, that is ready to run is then moved to the runnable state.
+       * running - when the thread gets the CPU, it moves from the *runnable to the *running state. Generally, the most common change in the state of a thread is from
+           runnable to running and again back to runnable.
+        #For example when two or more threads are compared for CPU time. CPU will allocate memory between them. One will start others will wait
+    - "Blocked/Waiting" - A thread is in WAITING state when it's waiting for some other thread to perform a particular action. A thread is in the BLOCKED state when
+        trying to access a section of code that is locked by some other thread.
+    - "Timed Waiting"
+    - "Terminating/Dead"
+
+5) Thread priority: is an integer in the range 1 to 10. The larger the integer, the higher the priority
+
+6) Synchronization of threads: When multiple threads runs in paralel there is a problem when tho or more threads modify one resource.
+   - synchronized: keyword to method - only one thead can execute!
+   - join() method: will wait a thread to complete execution. Example thread2.strat(); thread3.join(); thread4.strat(); I this case main thread will not execute thread4 until
+      thread3 is not completed.
+   - sleep(): thread go to sleep to the certain number of milliseconds.
+   -Dead Lock - when two thread waiting each other.
+   - wait(), notify(), notofyAll() methods: When i use wait() the thread will be waiting until notify() or notifyAll() will be executed. Exm: thread.start(), thread.wait(), notify()
+  
+
+
+****************************    OOP Principles ****************************  
+
+1) Abstraction - Abstraction aims to hide complexity from users and show them only relevant information
+   Абстракцията има за цел да скрие сложността от потребителите и да им покаже само подходяща информация
+
+- Hides the underlying complexity of data
+- Helps avoid repetitive code
+- Presents only the signature of internal functionality
+- Gives flexibility to programmers to change the implementation of abstract behavior
+- Partial abstraction (0-100%) can be achieved with abstract classes
+
+2) Encapsulation - Encapsulation helps with data security, allowing you to protect the data stored in a class
+   Restricts direct access to data members (fields) of a class.
+   
+   Access modifiers
+- Private: The access level of a private modifier is only within the CLASS
+- Default: The access level of a default modifier is only within the PACKAGE
+- Protected: The access level of a protected modifier is within the PACKAGE and outside the package through CHILD class.
+- Public: The access level of a public modifier is everywhere
+
+3) Polymorphism means "many forms", and it occurs when we have many classes that are related to each other by inheritance.
+   Polymorphism refers to the ability to perform a certain (определени) action in different ways.
+
+   Overriding vs Overloading
+  - Run-Time Polymorphism method OVERRIDING / Compile-Time Polymorphism method OVERLOADING: 
+  - Overriding occurs between superclass and subclass. Overloading both scenarios are true
+  - Overriding - have the same NAME and method arguments, Overloaded - must have same name different parametets
+  - Overriding return type must be same or subclass, Overloading return type is not mandatory to be same.
+
+4) Inheritance makes it possible to create a child class that inherits the fields and methods of the parent class. Key word - extends 
+   Parent classes are also called SUPERCLASS or BASE CLASS, while child classes are known as SUBCLASSES
+
+   - Implements the DRY (Don’t Repeat Yourself) programming principle
+   - Improves code reusability
+
+TODO with other 3 principles https://raygun.com/blog/oop-concepts-java/#abstraction
+
+
+
+****************************    Data Structures   **************************** 
+
+Linear Data structures: Array, List, Queue, Stack, Set (depending on implementation)
+
+*** Arrays: Поредица от Елементи, вградени в почти всеки език и са много бързи.
+При търсене на елемент в масив имаме константна сложност( исчисля ве по  формула не се обхождат елементите)
+защото елементите са индексираин точно на определено място в паметта.
+
+*** List - ordered collection, dublicates are allowed, can search by index
+
+*** ArrayList: class is a resizable array. Double its size when capacity is full
+-add() – takes O(1) time; however, worst-case scenario, when a new array has to be created and all the elements copied to it, it's O(n)
+-add(index, element) – on average runs in O(n) time
+-get() – is always a constant time O(1) operation
+-remove() – runs in linear O(n) time. We have to iterate the entire array to find the element qualifying for removal.
+-indexOf() – also runs in linear time. It iterates through the internal array and checks each element one by one, so the time complexity for this operation always requires O(n) time.
+-contains() – implementation is based on indexOf(), so it'll also run in O(n) time
+
+*** LinkedList: nodes holding a data field and a reference (pointer) to another node. In java the implementation is (doubly-linked list).
+ The first Node in the List is called HEAD and its pointer for the previous Node points to null. 
+ The last Node in the List is called TAIL and its pointer to the next Node points to null
+ implements List<E>, Deque<E> and supports method like peek(), poll()
+ Взимат повече памет заради поинтера към следващия/предишния елемент
+
+ Note {
+        private V data; (generic data)
+	private Node previous;
+	private Node next;
+}
+
+public class LinkedList {
+	
+	private Node head;
+	private Node tail;
+}
+
+- add() – appends an element to the end of the list. It only updates a tail, and therefore, it's O(1) constant-time complexity.
+- add(index, element) – on average runs in O(n) time
+- get() – searching for an element takes O(n) time.
+- remove(element) – to remove an element, we first need to find it. This operation is O(n).
+- remove(index) – to remove an element by index, we first need to follow the links from the beginning; therefore, the overall complexity is O(n).
+- contains() – also has O(n) time complexity
+
+*** Sets - cannot contain duplicate elements, contains only methods inherited from Collection. 
+
+ *** HashSet - uses a HASH TABLE for storage (internal HashMap implementation, well explaned in notes folder) Good examples: https://www.youtube.com/watch?v=FsfRsGFHuv4 ,           https://stackoverflow.com/questions/19691920/collision-resolution-in-java-hashmap
+ -add(), remove() and contains() operations cost constant O(1)
+
+- stores the elements by using a mechanism called hashing.
+- contains unique elements only.
+- doesn't maintain the insertion order. Here, elements are inserted on the basis of their hashcode.
+
+*** HashSet is the best approach for SEARCH operations.
+ 
+*** LinkedHashSet - maintains the insertion order.Inherits the HashSet class and implements the Set interface.
+    Maintains doubly-linked List across all elements and also uses a hashtable to store the elements.
+ - The time complexity of basic methods is o(1).
+
+*** TreeSet - Red-black (Balance tree) implementation. Provide natural ordering. Accept comparators!
+  - search, remove, and add consume O(log(N)) time
+
+*** SortedSet -> extends Set<>. All the elements of a SortedSet must implement the Comparable interface. Is subset of TreeSet<>
+    TreeSet<> ->  SortedSet<> -> Set<>
+
+Non-linear Data Structures: (Map, Tree, Graph)
+
+*** Map - A map contains values of key and value pair.
+ - Each key and value pair is known as an entry. A Map contains UNIQUE keys.
+ - Map is useful if you have to search, update or delete elements on the basis of a KEY
+ - A Map doesn't allow duplicate keys, but you can have duplicate values.
+
+HashMap / LinkedHashMap / TreeMap
+
+*** Hash Table - Thread save version of HashMap! Synchronized for almost all methods.
+
+
+
+****************************  BASE SPRING QUESTIONS **************************** 
+
+1) What is Spring boot => Is a Java-based spring framework. We can create app with minimum configiratin.
+ 
+2) Spring Boot advantedes over Spring => Minimum configuration, increase productivity, annotations instead xml, enbeded webserver(Tomcat, Jetty)
+
+3) Starter dependancy => Spring JPA, Spring Security, Web starter
+
+4) How Spring boot work => Auto configure my app depend of the added dependancies. @SpringBootApplication annotation and the main method
+
+5) Spring Conteiner => The Spring IoC (Inversion of Control) Container is the core of the Spring Framework that manages the lifecycle and dependencies of Java objects (Beans).
+   Instead of creating objects manually, the IoC Container injects dependencies automatica
+
+5) Inversion of conttrol (IoC) => Let someone else decide how to instanciate the objects. По тази начин нашия клас остава обсолютно де-капъл
+
+6) Dependancy Injection => is a technique we can use to implement IoC, Dependency injection is basically providing the objects
+     that an object needs (its dependencies) instead of having it construct them itself. It's a very useful technique for testing,
+     since it allows dependencies to be mocked. Dependencies can be injected into objects by (constructor injection or setter injection)
+
+7) Spring Beans => Are the objects which are managed completely by spring container. Beans can be defines usig XML or Annotations.
+    - XML configuration, bean can be defined using < bean > tag inside < beans > tag.
+    - Annotation configuration , bean can be defined using the annotations like @Component,@Service,@Controller,@Repository
+    Each bean defined in the spring will have a unique identifier
+
+8) Spring Initializer => Web app that helps us to create a Spring app maven / gradle
+
+
+10) Default Port => 8080, we can change it from application.properties server.port=9001
+
+11) Controller vs RestController => the fundamental difference between a web application and a REST API
+     is that the response from a web application
+     is a generally view of HTML + CSS + JavaScript while REST API just return data in form of JSON or XML
+     - @Controller return view
+    
+     - @RestController = @Controller + @ResponceBody. Return the object in JSON or XML Format
+    @PostMapping("/myAccount")
+    public Accounts getAccountDetails(@RequestBody Customer customer) {
+
+12) Scopes in Spring - https://www.baeldung.com/spring-bean-scopes
+-  Singleton Scope - the container creates a single instance of that bean; all requests for that bean name will return the same object, which is cached
+-  Prototype Scope - A bean with the prototype scope will return a different instance every time it is requested from the container
+-  Request Scope
+
+13) Spring Modules:
+
+- Spring Web 
+- Spring core 
+- Spring security
+- Spring Context - ORM / Transaction / Validation
+- Spring JDBC - DB connection
+
+14) SpringWebFlux: 
+
+Spring WebFlux heavily uses two publishers:
+Mono
+Flux
+
+Use Netty (non-blocking I/O) instead of Tomcat
+
+
+****************************  Microservice Architecture ****************************  
+
+- Service Discovery: Edureka : bridges the gap between a service's name and access information
+  (IP address) by providing a dynamic mapping between a service name and its IP address
+ 
+- Resilience / Fault Tolereance: Return the application to a fully functioning state after a failure
+
+- Circiut Breaker Pattern: { Resilience4j } during our micro-service is off, we can use Default responce, other DB, or Cache implement fall-back method
+
+-  Rate Limited Patter  also adding annotation, properties in   application.properties to prevent rate limiting
+   Bulkhead Pattern  Advance concept. Id one API in micro-service eating up all threads and resources and do NOT give a lot to the other API's
+
+ - Communication : RestTemplate, Feign Client, 
+
+Redis : In memory DB (RAM), fast.  provides a buffer for such queried result, web server only needs to go through the key-value pairs stored in Redis
+        key is usually a hash code of a specific query, the value is the queried result.
+
+Kafka : Districutet system/ Couple of producers => Kafka Cluster => Consumer, Messaging, Streams,
+
+
+
+****************************  GIT ****************************  
+
+Merge vs Rebase -Both combine branches
+- Merge create a new commit object Rebase doesn't (apply last commit)
+- Rebase re-write history. takes all commits from custom branch place it to the target branch, not only the last commit (linear approach)
+
+Merging is a safe option that preserves the entire history of your repository, while rebasing creates a linear history by moving your feature branch onto the tip of main
+
+****************************  HTTP ****************************** **
+
+The most commonly used HTTP verbs POST, GET, PUT, DELETE are similar to CRUD (Create, Read, Update and Delete)
+Create - POST, Read - GET, Update - PUT, Delete - DELETE
+PATCH: Submits a partial modification to a resource. If you only need to update one field for the resource, you may want to use the PATCH method
+
+- Idempotent HTTP method is a method that can be invoked many times without the different outcomes.
+  It should not matter if the method has been called only once, or ten times over. The result should always be the same.
+- POST VS PUT - 
+
+
+
+****************************  Design Patterns ****************************  
+
+- Singleton - ensures that class can have only one instance and provides global access to it (to that single instance)
+      Using static method we check: is first and only instance is created (lazy variant)
+
+     - EagerSingleton - Singleton Will be instantiated during class loading.
+        ( private static Singleton instance = new Singleton(); )
+        Thread save hread safe means, it doesn’t matter how many threads are trying to invoke getInstance() method,
+        they’ll always get that one object which is created eagerly.
+
+     - LazySingleton only get instantiated when someone will invoke the getInstance() method. It’ll check if it’s null
+     Main futures: private static Singleton variable /  private constructor / static method Singleton getInstance() -> check is null
+
+
+- Builder pattern - he builder pattern is a design pattern that allows for the step-by-step creation of complex objects using the correct sequence of actions.
+     How It Works The main class (Product) remains immutable.
+     A static inner class (Builder) is used to temporarily store values while the object is being built.
+     On each setter method, the Builder instance returns itself, allowing method chaining.
+     The final build() method returns an instance of the main class.
+
+- Observer - Observer pattern is a behavioral pattern and defines one-to-many dependency between objects  so when one object change its state all of
+             its dependencies are notified and updated automatically
+          Main futures: Publisher / Subsriber
+  
+- Factory method - In Factory pattern, we create object without exposing the creation logic to the client and refer to newly created object using a common interface.
+  Simple Factory is NOT actually a design pattern.
+  Simple Factory violates Open-Close-Principle. If I go for Simple Factory,I will end up with adding dozens of if-else
+  
+    
+
+****************************  REST (Representational State Transfer) ****************************  
+
+- The REST architecture allows API providers to deliver data in multiple formats such as plain text, HTML, XML, YAML, and JSON, which is one of its most loved features
+  Архитектурният модел REST включва взаимодействията между сървър и клиент, осъществени по време на трансфера на данни.
+
+- Restful Web Services- web service build on rest architecture, Stateless (no server-side sessions), expose API from your application
+
+- Rest vs SOAP: SOAP is a protocol, whereas REST is an architectural style, SOAP can only work with XML format.
+
+
+
+****************************  Testing ****************************  
+--- Junit5 and Mockito ---
+JUnit = Java + Unit Testing   / Junit5
+
+Technically speaking both "mocks" and "spies" are a special kind of "test doubles".
+
+Mockito is unfortunately making the distinction weird.
+
+Mock vs Spy
+A mock in mockito is a normal mock in other mocking frameworks (allows you to stub invocations; that is, return specific values out of method calls).
+A spy in mockito is a partial mock in other mocking frameworks (part of the object will be mocked and part will use real method invocations).
+
+--- @SpringBootTest ---  This annotation is used to load complete application context for end to end integration testing
+    Docker dublicate на базата за защото H2 има различен ситанкис {testcontainers} dependancy
+
+
+****************************  Project compares Qustions  ****************************  
+
+
+1) PostgreSQL vs Dybamo DB
+
+ The main difference between DynamoDB and Postgres is that DynamoDB is a NoSQL database service while Postgres is a relational database system.
+
+ Data Model:
+ PostgreSQL/SQL: It follows a relational data model, where data is organized into tables with rows and columns.
+
+ DynamoDB: It is a NoSQL database that uses a key-value and document data model. Data is stored in tables, similar to SQL databases, but it allows for flexible schemas and can handle semi- structured and unstructured data.
+
+ Scalability:
+ PostgreSQL/SQL: It can scale vertically by upgrading hardware resources or horizontally through replication and sharding. However, horizontal scaling may require more manual effort   compared to NoSQL databases.
+ DynamoDB: It is designed for horizontal scalability out of the box. It can automatically handle partitioning and distribution of data across multiple servers to accommodate high read and   write throughput.
+
+ Performance:
+ PostgreSQL/SQL: It is well-suited for complex queries and transactions, especially in scenarios where data relationships are important. With proper indexing and query optimization, it can  provide fast read and write performance.
+ DynamoDB: It offers low-latency read and write operations, making it suitable for high-throughput applications. However, its performance may degrade with complex queries that require  scanning large datasets.
+
+****************************  Developer/Technology news  **************************** 
+Infuenclers: amigos code, Dan Vega, 

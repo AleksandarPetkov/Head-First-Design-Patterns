@@ -1,0 +1,20 @@
+ OpenShift vs Kubernetes: Core Relationship
+Feature         	Kubernetes	                                         OpenShift
+What it is		Container orchestration engine	                         Enterprise platform built on top of Kubernetes
+Developed by		Open-source (Cloud Native Computing Foundation) 	 Red Hat (now part of IBM)
+Installation		DIY – you install, configure, and secure it	         Pre-packaged, includes installer, UI, monitoring, CI/CD tools, etc.
+User Interface		CLI-first (kubectl)	                                 Rich web console + CLI (oc)
+Security		Up to the admin	                                         Enforces stricter defaults (e.g., SecurityContext, RBAC)
+Built-in Tools		Minimal	Includes logging, monitoring, CI/CD (Tekton), developer tools
+
+✅ In short:
+OpenShift uses Kubernetes under the hood.
+
+It's like a ready-to-go, enterprise-friendly Kubernetes platform.
+
+You still write Kubernetes manifests (Deployment, Service, Ingress, etc.), but OpenShift may wrap or enhance them.
+
+🧠 Think of it like this:
+Kubernetes = raw engine
+
+OpenShift = engine + dashboard + guard rails + enterprise support

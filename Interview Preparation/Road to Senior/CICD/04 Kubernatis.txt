@@ -1,0 +1,70 @@
+1) A Kubernetes Cluster Consists of Two Main Components:
+ A. Control Plane (Master Node)
+ This is responsible for the global state and management of the cluster. It includes components that make decisions about the cluster, like scheduling, detecting/responding to cluster events, and maintaining overall health.
+
+  Key components:
+  kube-apiserver: The front-end for the Kubernetes control plane.
+  etcd: A key-value store that stores all cluster data.
+  kube-scheduler: Assigns workloads to worker nodes.
+  kube-controller-manager: Runs controller processes (e.g., replication, node management).
+  cloud-controller-manager (optional): Interacts with the cloud provider, if any.
+
+  B. Worker Nodes. These nodes run the actual application workloads in containers. Each node includes:
+
+  kubelet: Communicates with the control plane, manages containers on the node.
+  kube-proxy: Handles networking and routing traffic.
+
+Container runtime: Software like Docker or containerd that runs containers.
+
+------------------------
+Kubernetes Cluster
+│
+├── Control Plane (Master Node)
+│   ├── kube-apiserver
+│   ├── etcd
+│   ├── kube-scheduler
+│   └── kube-controller-manager
+│
+└── Worker Nodes
+    ├── kubelet
+    ├── kube-proxy
+    └── Container Runtime
+------------------------
+
+2) What Is a Pod in Kubernetes?
+
+ A Pod is the smallest deployable unit in Kubernetes. It wraps one or more containers that:
+ Share the same network namespace (same IP/port space)
+ Can share storage (volumes)
+ Are always scheduled together on the same node
+
+ Usually, a Pod has one container, but it can have multiple containers if they are tightly coupled (e.g., sidecars like a logging agent or proxy).
+
+ 📦 Pod vs Node: How They Relate
+ A node is a machine (VM or physical) in the cluster. 
+ A pod runs on a node.
+ A node can host many pods — limited by the node’s CPU, memory, and resources.
+
+ Example:
+ Imagine a Kubernetes cluster with:
+
+ 1 node (a virtual machine with 4 CPUs and 8 GB RAM)
+ You can run many small pods (e.g., nginx, redis, etc.) on that one node, as long as the total resource usage stays within limits.
+
+ * How to Create a Pod
+
+ ✅ Using a YAML File (Recommended)  Here’s a simple example YAML to create a Pod:
+------------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+spec:
+  containers:
+    - name: test-container
+      image: nginx
+      ports:
+        - containerPort: 80
+------------------------
+ To create it commands => kubectl apply -f pod.yaml
+

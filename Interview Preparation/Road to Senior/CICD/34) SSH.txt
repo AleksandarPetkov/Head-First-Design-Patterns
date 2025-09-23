@@ -1,0 +1,23 @@
+********   What Is SSH?
+  SSH uses TCP (Transmission Control Protocol) for reliable communication.
+  SSH (Secure Shell) is a network protocol that allows you to securely connect to another computer (usually a server) over the internet or a local network.
+  SSH lets you remotely control another machine, just like you're sitting in front of it.
+
+ 🔧 What You Can Do With SSH:
+ Run commands on a remote server
+ Start/stop applications
+ Transfer files (using tools like scp or sftp)
+ Deploy code
+ Monitor system resources
+ Set up port forwarding or tunnels
+
+ 🔒 Why SSH Is Secure:
+ SSH encrypts all communication between your local machine and the remote machine, protecting against:
+ Eavesdropping (man-in-the-middle attacks), Password theft
+
+ 📦 SSH Example: ssh alice@192.168.1.10
+  ssh — the command
+  alice — the user you're logging in as
+  192.168.1.10 — the IP address of the remote machine
+
+ You'll be prompted for a password, or it will use a secure SSH key pair if set up.

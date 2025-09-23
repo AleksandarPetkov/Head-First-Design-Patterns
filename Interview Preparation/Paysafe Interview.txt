@@ -1,0 +1,148 @@
+представяне тяхно
+представяне себе си / да завършим с въпрос към нас (проекта)
+
+те ни разкарават за проекта
+
+какво сте правили за ouath2, JPA, hibarnate коя версия, laze eager loading, java version, java 8 funcional, joins
+как работи left join, каква база са ползвали, CICD? SQL, keyClock()
+SOLID, как може да разменищ стойостите на 2 променливи
+канари деплоймент, feature flag (пуска се плавно спрямо потребителите)
+
+------------------------------------------------------------------------------------------------------------
+*** Hibernate:
+-Hibernate version 6.1.7.Final
+- Hibernate 6.1.7.Final corresponds to JPA version 2.2 (https://hibernate.org/orm/releases/)
+- new futures hibarnate 6: In Hibernate 6, we don’t need a 3rd party library since this version supports Object to JSON out-of-the-box : @JdbcTypeCode(SqlTypes.JSON)
+- @TimeZoneStorage Now we can store the time zone in a separate column, and Hibernate will properly store java date and time using two columns: timestamp and timezone
+- The 3rd version of Spring Boot uses Hibernate 6 by default and requires JDK 17
+
+*** Lazy vs Eeager: Sometimes you have two entities and there's a relationship between them. University/Students example:
+
+  -Lazy default, not explicity load all studends. To load it on-demand (i.e. lazily) when you call the university's getStudents() method.
+  -Eager: load all student relations to this Inuversity. To load it together with the rest of the fields (i.e. eagerly), or
+
+   Very good example: https://stackoverflow.com/questions/2990799/difference-between-fetchtype-lazy-and-eager-in-java-persistence-api#:~:text=LAZY%3A%20It%20fetches%20the%20child,child%20entities%20along%20with%20parent.
+
+ *** Cascade strategies defines how define how operations (such as persist, merge, remove) should be propagated from parent entities to their associated child entities.
+
+    -CascadeType.ALL: When an operation is applied to a parent entity, the same operation is cascaded to all associated child entities
+    -CascadeType.(PERSIST, REMOVE, UPDATE): is haracterized with the provided type
+
+*** Java version questions:
+  java 8:
+  - Stream API − a special iterator class that allows us to process collections of objects in a functional manner
+  - Functional Interface – an interface with maximum one abstract method; implementation can be provided using a Lambda Expression
+  - Lambda Expressions − a new language feature allowing us to treat actions as objects
+  - Method References − enable us to define Lambda Expressions by referring to methods directly using their names
+  - Optional − special wrapper class used for expressing optionality
+  - Default methods − give us the ability to add full implementations in interfaces besides abstract methods
+  - Date API − an improved, immutable JodaTime-inspired Date API
+
+  Functional interface + lambda syntax example:                         (implementation)                               (using some of the impl in method)
+    | @FunctionalInterface                                   | MathOperation addition = (a, b) -> a + b;    | int operate(int a, int b, MathOperation mathOperation) {
+    | interface MathOperation { int operate(int a, int b); } | MathOperation subtraction = (a, b) -> a - b; | return mathOperation.operate(a, b); }
+    
+java 8+
+ - Java 10 -var
+ - Java 11 -Strings methods, isBlank(), lines()
+ - Java 13 -Switch case work with lamda,
+ - Java 14 -Record class: special type of class declaration aimed at reducing the boilerplate code. Getter setters
+           - Finally NullPointerExceptions describe exactly which variable was null
+ - java 15 -  Adding blocks """ ............... """ (Multiline Strings)
+           - Sealed Classes: isrestricts which other classes or interfaces can extend or implement it. Syntax: public sealed class Shape permits Circle, Square, Triangle {}
+ - java 17 - Pattern Matching for switch. Example we can pass the object and it do the logic dependign on the type (Integer, String, Cat, ..) 
+           - Sealed Classes (Finalized)
+ - Java 18 - Default UTF-8
+ - java 19,20 in progress (threds staff)
+
+***  Stream API:
+ - Operators: map, flatMap, filter, sorted, distinct, limit, skip, anyMatch, allMatch, collect, findFirst, reduce (Reduces the elements of the stream to a single value )
+
+ - map vs flatMap:
+  - Use 'map' when you want to transform each element of a stream independently into another value.
+  - Use 'flatMap' when you have nested structures. Example two arrays into one
+
+***  MySQL vs PostgreSQL
+  -PostgreSQL - object-relational database (ORDBMS) table inheritance, good for large databases, handle complex queries
+  -MySQL - relational database,  simpler database that’s fast, reliable, well-understood, and easy to set up and manage
+
+*** SQL Interview questions:
+  - 'WHERE' clause in SQL is used to filter rows from a table based on a specified condition. The WHERE clause comes after the SELECT statement
+    in a SQL query and before any other clauses such as ORDER BY or GROUP BY.
+
+  - 'ORDER BY' clause in SQL is used to sort the result set returned by a query in ascending or descending order
+
+  - 'GROUP BY' The GROUP BY clause is used to group rows that have the same values into summary rows, typically used with aggregate functions like COUNT, SUM, AVG, etc. It reduces     the number of rows returned by a query.
+  
+  - 'Joins' are used to combine rows from two or more tables based on a related column between them. The most common types of joins are:
+
+   INNER JOIN: Returns only the rows where there is a match in both tables.
+   LEFT JOIN: Returns all rows from the left table and matching rows from the right table, returns null if it does not find any matching record
+   RIGHT JOIN: Returns all rows from the right table and matching rows from the left table, returns null if it does not find any matching record
+   FULL OUTER JOIN: Returns all rows when there is a match in either table
+   
+   Exampe:Show employee name, department name
+   SELECT employees.name, departments.department_name FROM employees
+   INNER JOIN departments ON employees.department_id = departments.department_id;
+
+ - UNION: The UNION operator is used to combine the result sets of two or more SELECT statements into a single result set, removing duplicate rows
+   Example:  SELECT name FROM employees UNION SELECT name FROM contractors;
+
+ - Primary Vs Foreign key
+   :Primary Key:  Its a column that ensures that every row in the table is uniquely identifiable and serves as a unique identifier for each record.
+
+   :Foreign Key: The foreign key is a column (or a set of columns) in a table that contains values that correspond to the primary key values in another table.
+   These values establish the relationship between the two tables.
+
+   Foreign Key Constraint: The foreign key constraint is the rule or restriction applied to the foreign key column(s) in the referencing table. It enforces referential integrity by    ensuring that the values in the foreign key column(s) must exist as values in the corresponding primary key column(s) of the referenced table.
+
+   CREATE TABLE grades (
+    grade_id INT PRIMARY KEY,
+    student_id INT,
+    grade VARCHAR(2),
+    FOREIGN KEY (student_id) REFERENCES students(student_id)
+   );
+
+   In this example:
+   student_id is the foreign key column in the grades table.
+   FOREIGN KEY (student_id) REFERENCES students(student_id) defines the foreign key constraint on the student_id column in the grades table, specifying that the values in the       student_id column must exist as values in the student_id column of the students table.
+
+ *** Table relation:
+  - One-To-Many: In a one-to-many relationship, one row in the first table can be related to one or more rows in the second table. 
+    This relationship is typically implemented by placing a foreign key in the "many" side table that references the primary key of the "one" side table.
+
+    CREATE TABLE univerity (
+    university_id INT PRIMARY KEY,
+    name VARCHAR(50) );
+
+    CREATE TABLE student (
+     student_id INT PRIMARY KEY,
+     name VARCHAR(50),
+     university_id INT,
+     FOREIGN KEY (university_id) REFERENCES univerity (student_id));
+
+ - Many-to-Many In a many-to-many relationship, many rows in one table can be related to many rows in another table.
+   This relationship is typically implemented using an additional table, also known as an mapping or linking table.
+   The mapping table contains foreign keys referencing the primary keys of both tables involved in the relationship.
+
+   CREATE TABLE enrollment (
+    student_id INT,
+    course_id INT,
+    PRIMARY KEY (student_id, course_id),
+    FOREIGN KEY (student_id) REFERENCES student(student_id),
+    FOREIGN KEY (course_id) REFERENCES course(course_id));
+
+*** SOLID: five principles of Object-Oriented class design
+    - Single Responsibility Principle: A class should have only one reason to change, meaning it should have only one responsibility or job.
+      This principle encourages breaking down functionality into smaller, cohesive units.
+
+    - Open/Closed Principle: Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification.
+      This principle encourages designing systems that can be easily extended with new functionality without modifying existing code
+
+    -  Liskov Substitution Principle (LSP): Objects of a superclass should be replaceable with objects of its subclasses without affecting the correctness of the program.
+       This principle ensures that subtypes can be used interchangeably with their base types without introducing unexpected behavior
+
+    - Interface Segregation means that we should break larger interfaces into smaller ones
+
+    - Dependency inversion talks about the coupling between the different classes or modules. It focuses on the approach where the higher classes are not dependent on the lower       public class Car {
+      private Engine engine; -> Interface/ Abstract rather than a concrete implementation
