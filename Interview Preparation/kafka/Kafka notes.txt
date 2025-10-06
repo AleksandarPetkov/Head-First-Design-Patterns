@@ -1,0 +1,80 @@
+1) What is message broker
+Message Broker
+
+A message broker is a system (software/service) that sits in the middle of communication between different applications or services.
+
+It receives messages from one application (the producer) and routes them to another (the consumer).
+It decouples producers and consumers, meaning they don’t need to know about each other or be available at the same time.
+
+🔑 Examples: RabbitMQ, Kafka, ActiveMQ, AWS SQS, Google Pub/Sub
+
+Producer:
+A producer is the component/service that creates and sends messages to the broker.
+Think of it as the “sender” of data.
+It pushes events/messages (like “new order placed” or “sensor reading”) into the broker.
+
+Consumer:
+A consumer is the component/service that receives messages from the broker.
+Think of it as the “receiver” of data.
+It processes the messages that were sent by producers (like saving orders to a database, sending notifications, or running analytics).
+
+Analogy (Post Office Example)
+Producer → Person sending a letter.
+Message Broker → Post office that stores, routes, and delivers letters.
+Consumer → Person receiving and reading the letter.
+
+Why Use Them?
+Decoupling → Producers don’t need to know about consumers.
+Scalability → Multiple consumers can read messages in parallel.
+Reliability → Messages can be stored until consumers are ready.
+Flexibility → Different services can consume the same message in different ways.
+
+
+1) What is kafka: Kafka is a distributed system consisting of servers and clients that communicate via a high-performance TCP network protocol
+   Event-streaming points to two differnt types(Create/Process real time stream)
+   * Creating real time stream (when kafka receive stream of data from third party app)
+   * Process real time stream (when kafka is already received stream of data need to process it)
+   Example: [Sending data server] --> [Kafka] --> [Our app]
+   * What distributed mean: we can distrubute additional kafka service to regions and if one is down call other
+
+
+2) Why do we need kafka: 
+   Example: if postman come to the home and I'm not there the letter(data) will be lost
+   To fix the issue I can add 'Letter box' which act as middleman between me and post man and the data is safe
+
+   Example: I have two apps AP1 and AP2. AP1 wants to send data to AP2. But if AP2 is not available the data will be lost
+   TO overcome this issue need to install something simular to the 'letter box' between this two apps. Some kind of messagind system (Rabbit MQ, Kafka, Redis, ect..)
+   [AP1] --> [Kafka (messaging system)] --> [AP2]
+
+   Example: If we have multiple services wich communicate with multiple other services. Challenges (Data format, Connection types)
+   Instead of creating multiple connections use messaging system. All data is send to Kafka and depending which data is needed for
+   the others services find it in kafka
+   [ap1]  -->           <-- [ap3]
+   [ap2]  -->  [Kafka]  <-- [ap4]
+   [ap3]  -->           <-- [ap5]
+
+3) How does it work (Basic): Publisher / Subscriber model
+   [[Publisher]] --> (publish message/event/data) -->   [[Message broker (message will set here)]]  <-- (will go to the broker and ask for messages) <-- [[Subsciber]]
+
+
+4) Kafka Architecture/Components:
+   - Producer-Consumer: Produce source of data which publish the messages/events to the broker (Kafka). Then Kafka will store this messages and then Consumer will get them
+   
+   - Cluster: Group of services/computers which works for common purpose. Can have multiple kafka services single kafka Cluster.
+     Cluster[ Kafka1, Kafka2, .. ] This is very useful when single Kafka broker is not able to handle to load, then other broker will care
+   
+  - Topic: Provide a way to organize and categorize the messages within the Kafka messaging system. If kafka have a lot large amount of data,
+    we can create multiple topics to store different type of data. Producer will create concrete topic and Consumer will search for this concrete topic
+ 
+  - Partition: Topics in Kafka are divided into Partitions, and each partition is an ordered, immutable sequence of records (messages)
+    Break Topic into multipal parts and distribute thise parts into different machines
+    Topic: [partition_1, partition_2, partition_3...]
+   
+  - Offset (Offset Number): Purpose of the Offset is to keep it track of which message have been already consumed by Consumer
+  
+  - Consumer Group: specify group of cosumers (multiple services)
+
+  - Zookeeper: Apache ZooKeeper is a distributed coordination service that is often used alongside Apache Kafka to manage and coordinate distributed systems.
+    While Apache Kafka itself can operate without ZooKeeper starting from Kafka 2.8.0 (as Kafka is moving towards removing its dependency on ZooKeeper),
+    ZooKeeper has historically played a crucial role in Kafka's architecture.
+   

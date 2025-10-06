@@ -359,6 +359,23 @@ PATCH: Submits a partial modification to a resource. If you only need to update 
 - Factory method - In Factory pattern, we create object without exposing the creation logic to the client and refer to newly created object using a common interface.
   Simple Factory is NOT actually a design pattern.
   Simple Factory violates Open-Close-Principle. If I go for Simple Factory,I will end up with adding dozens of if-else
+
+
+****************************     SOLID    ****************************  
+                  Five principles of Object-Oriented class design:
+
+- Single Responsibility Principle: A class should have only one reason to change, meaning it should have only one responsibility or job.  This principle encourages breaking down functionality into smaller, cohesive units.
+     
+
+- Open/Closed Principle: Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification.This principle encourages designing systems that can be easily extended with new functionality without modifying existing code
+
+-  Liskov Substitution Principle (LSP): Objects of a superclass should be replaceable with objects of its subclasses without affecting the correctness of the program. This principle ensures that subtypes can be used interchangeably with their base types without introducing unexpected behavior
+
+- Interface Segregation means that we should break larger interfaces into smaller ones
+
+- Dependency inversion talks about the coupling between the different classes or modules. It focuses on the approach where the higher classes are not dependent on the lower:    
+ public class Car {
+      private Engine engine; -> Interface/ Abstract rather than a concrete implementation
   
     
 
@@ -411,3 +428,31 @@ A spy in mockito is a partial mock in other mocking frameworks (part of the obje
 
 ****************************  Developer/Technology news  **************************** 
 Infuenclers: amigos code, Dan Vega, 
+
+
+****************************  Dynamo DB  **************************** 
+What is DynamoDB:
+NoSQL key-value, document database from AWS, designed for high performance and scalability.
+
+When you create a table, we must specify the primary key of the table. DynamoDB supports two different kinds of primary keys:
+ - Partition key – A simple primary key, composed of one attribute known as the partition key.
+ - Partition key and sort key – Referred to as a composite primary key, this type of key is composed of two attributes. 
+
+ DynamoDB uses the partition key value as input to an internal hash function.
+ The output from the hash function determines the partition (physical storage     internal to DynamoDB) in which the item will be stored.
+ All items with the same partition key value are stored together, in sorted order by sort key value.
+ In a table that has a partition key and a sort key, it's possible for multiple items to have the same partition key value.
+ However, those items must have different sort key values.
+
+Example ONE-TO_MANY Relation:
+Primary key = Partition key: student_id + Sort key: course_id
+
+All courses for a student are grouped under the same student_id.
+Each course has a unique course_id within that partition.
+
+Example Data (Items)
+student_id	course_id	student_name	course_name	grade
+S001	          C101	         Alice	           Math 	A
+S001	          C102	         Alice	           Physics	B
+
+

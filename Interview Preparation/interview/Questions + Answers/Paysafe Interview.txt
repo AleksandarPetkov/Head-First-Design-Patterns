@@ -4,7 +4,7 @@
 те ни разкарават за проекта
 
 какво сте правили за ouath2, JPA, hibarnate коя версия, laze eager loading, java version, java 8 funcional, joins
-как работи left join, каква база са ползвали, CICD? SQL, keyClock()
+как работи left join, каква база са ползвали, CICD? SQL, Keycloack
 SOLID, как може да разменищ стойостите на 2 променливи
 канари деплоймент, feature flag (пуска се плавно спрямо потребителите)
 
@@ -96,6 +96,7 @@ java 8+
 
    Foreign Key Constraint: The foreign key constraint is the rule or restriction applied to the foreign key column(s) in the referencing table. It enforces referential integrity by    ensuring that the values in the foreign key column(s) must exist as values in the corresponding primary key column(s) of the referenced table.
 
+
    CREATE TABLE grades (
     grade_id INT PRIMARY KEY,
     student_id INT,
@@ -124,6 +125,9 @@ java 8+
  - Many-to-Many In a many-to-many relationship, many rows in one table can be related to many rows in another table.
    This relationship is typically implemented using an additional table, also known as an mapping or linking table.
    The mapping table contains foreign keys referencing the primary keys of both tables involved in the relationship.
+
+   Composite primary key: multiple foreign keys are allowed to establish different relationships with other tables or even the same table
+
 
    CREATE TABLE enrollment (
     student_id INT,
