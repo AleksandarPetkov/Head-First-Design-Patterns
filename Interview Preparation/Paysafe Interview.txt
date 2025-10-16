@@ -28,6 +28,53 @@ SOLID, как може да разменищ стойостите на 2 про�
     -CascadeType.ALL: When an operation is applied to a parent entity, the same operation is cascaded to all associated child entities
     -CascadeType.(PERSIST, REMOVE, UPDATE): is haracterized with the provided type
 
+***The Problem Two operations (say, two users or two threads) try to update the same record at the same time.
+
+Which one wins?
+➡️ Without any protection, last write wins — the update that commits last overwrites the previous change!
+🧱 How Hibernate Can Help — Concurrency Control Strategies
+
+Hibernate supports two main approaches:
+🅰️ 1. Optimistic Locking (Versioning) — Recommended
+This is the most common and elegant solution for business applications.
+
+Example:
+Add a version field to your entity:
+@Entity
+public class Product {
+    @Id
+    private Long id;
+
+    private int stock;
+
+    @Version
+    private Long version; // managed automatically by Hibernate
+}
+
+How it works
+When Hibernate reads the entity, it also reads version.
+On UPDATE, it adds the version to the WHERE clause:
+
+UPDATE product
+SET stock = ?, version = version + 1
+WHERE id = ? AND version = ?
+
+If another transaction already updated it (so version changed), the UPDATE affects 0 rows, and Hibernate throws:
+org.hibernate.StaleObjectStateException or OptimisticLockException
+You can then handle it (e.g., retry the operation or show a message like “Record was updated by another user”).
+
+✅ Lightweight (no DB locks)
+✅ Detects conflicting updates
+
+🅱️ 2. Pessimistic Locking (Explicit DB Locks) => LockModeType.PESSIMISTIC_WRITE) inside the transaction.
+If concurrent updates are common and must be serialized (e.g., financial transactions, stock decrement), use row-level locking.
+
+This locks the row until the transaction commits or rolls back.
+Other transactions trying to update the same row will wait (or fail after timeout).
+✅ Guarantees no lost updates
+✅ Suitable for critical, high-value updates (inventory, payments)
+
+
 *** Java version questions:
   java 8:
   - Stream API − a special iterator class that allows us to process collections of objects in a functional manner
